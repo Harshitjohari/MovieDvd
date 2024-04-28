@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

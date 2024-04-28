@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://harshitjohari:qwerty@localhost:5432/myDatabase"
+}
+
+// Define the Admin model
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  token     String?
+  // Add more admin-related fields as needed
+}
+
+// Define the User model
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   
+  password String   
+  phone    String      
+  name     String
+  token    String?
+  otp      Int?
+  role    String?
+  createdAt  DateTime @default(now())
+  // Add more user-related fields as needed
+}
+
+// Define the Movie model
+model Movie {
+  id         Int      @id @default(autoincrement())
+  title      String
+  genre      String
+  year       Int
+  leadActor  String
+  director   String
+  quantity       Int     @default(0)
+  price       Int     @default(0)
+  isDeleted  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  cartItems   CartItem[]
+  order   Order[]
+}
+
+// Define the Order model
+model Order {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  quantity    Int
+  totalPrice  Float
+  status      String  @default("Initiated") // Possible values: "Initiated", "In Process", "Shipped", "Collected", etc.
+  createdAt  DateTime @default(now())
+
+  // Define the relationship to the Movie model
+  movie      Movie    @relation(fields: [movieId], references: [id])
+  movieId    Int
+}
+
+// Define the CartItem model
+model CartItem {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  quantity   Int
+  price      Float
+  createdAt  DateTime @default(now())
+
+  // Define the relationship to the Movie model
+  movie      Movie    @relation(fields: [movieId], references: [id])
+  movieId    Int
+}
